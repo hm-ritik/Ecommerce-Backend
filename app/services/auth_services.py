@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import User
 from app.schemas.user_schema import UserCreate , Login
 from app.repositories.user_repo import create_user , get_user_by_email , get_user_by_username
-from app.core.security import hash_password , verify_password
+from app.core.security import hash_password , verify_password ,get_access_token
 
 
 async def register_user(db:AsyncSession , user_data:UserCreate):
@@ -34,8 +34,8 @@ async def login_user(db:AsyncSession , login_data:Login):
         existing_user.password_hash
     ):
         raise ValueError("Email or Password is InValid")
-    return existing_user
-
+    token=get_access_token(existing_user.email)
+    return token
 
         
     
